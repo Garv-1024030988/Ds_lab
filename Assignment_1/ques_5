@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+void cal_sum(int row, int col, int matrix[][10], int sum_row[], int sum_col[])
+{
+    int sum;
+    for (int i = 0; i < row; i++)
+    {
+        sum = 0;
+        for (int j = 0; j < col; j++)
+        {
+            sum += matrix[i][j];
+        }
+        sum_row[i] = sum;
+    }
+    for (int i = 0; i < col; i++)
+    {
+        sum = 0;
+        for (int j = 0; j < row; j++)
+        {
+            sum += matrix[j][i];
+        }
+        sum_col[i] = sum;
+    }
+}
+
+void display_row(int row, int sum_row[])
+{
+    cout << "Row-wise summation:" << endl;
+    for (int i = 0; i < row; i++)
+    {
+        cout << sum_row[i] << endl;
+    }
+    cout << endl;
+}
+
+void display_col(int col, int sum_col[])
+{
+    cout << "Column-wise summation:" << endl;
+    for (int i = 0; i < col; i++)
+    {
+        cout << sum_col[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int row, col;
+    cout << "Enter no. of rows: ";
+    cin >> row;
+    cout << "Enter no. of columns: ";
+    cin >> col;
+
+    int matrix[10][10];
+    int sum_row[10], sum_col[10];
+
+    cout << "Enter the numbers:" << endl;
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            cin >> matrix[i][j];
+        }
+    }
+
+    cal_sum(row, col, matrix, sum_row, sum_col);
+    display_row(row, sum_row);
+    display_col(col, sum_col);
+
+    return 0;
+}
