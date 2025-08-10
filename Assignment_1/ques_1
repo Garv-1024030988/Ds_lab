@@ -1,0 +1,134 @@
+#include <iostream>
+using namespace std;
+int arr[50];
+int size1 = 0;
+// to create an array
+void create()
+{
+
+    cout << "Input integers:" << endl;
+    for (int i = 0; i < size1; i++)
+    {
+        cin >> arr[i];
+    }
+    cout << endl;
+}
+// to display an array
+void display()
+{
+
+    cout << size1 << endl;
+    cout << "Your array is: " << endl;
+    for (int i = 0; i < size1; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+// to Insert element in an array
+void insert(int num, int idx)
+{
+    for (int i = size1 - 1; i >= idx; i--)
+    {
+        arr[i + 1] = arr[i];
+    }
+
+    arr[idx] = num;
+    ++size1;
+}
+// to delete element in an array
+void del(int idx)
+{
+    for (int i = idx; i < size1 - 1; i++)
+    {
+        arr[i] = arr[i + 1];
+    }
+    size1--;
+}
+// For Linear search
+int linear_search(int target)
+{
+    for (int i = 0; i < size1; i++)
+    {
+        if (target == arr[i])
+            return i;
+    }
+    return -1;
+}
+
+int main()
+{
+    int button = 0;
+    int idx = 0;
+    int num = 0;
+    int target = -1;
+    while (button != 6)
+    {
+
+        cout << "Press 1:Create\nPress 2:Display\nPress 3:Insert\nPress 4:Delete\nPress 5:Linear Search\nPress 6:Exit" << endl;
+        cin >> button;
+
+        // creating menu
+        switch (button)
+        {
+        case 1:
+            cout << "Enter the size of array: ";
+            cin >> size1;
+            create();
+            break;
+        case 2:
+            if (size1 == 0)
+            {
+                cout << "Create an array first by pressing 1" << endl;
+                break;
+            }
+            display();
+            break;
+        case 3:
+            if (size1 == 0)
+            {
+                cout << "Create an array first by pressing 1" << endl;
+                break;
+            }
+            cout << "Enter the number you want to insert: ";
+            cin >> num;
+            cout << "Enter the index at which you want to insert the number: ";
+            cin >> idx;
+            insert(num, idx);
+            cout << size1 << endl;
+            break;
+        case 4:
+            if (size1 == 0)
+            {
+                cout << "Create an array first by pressing 1" << endl;
+                break;
+            }
+            cout << "Enter the idx you want to delete: ";
+            cin >> idx;
+            del(idx);
+
+            break;
+        case 5:
+            if (size1 == 0)
+            {
+                cout << "Create an array first by pressing 1" << endl;
+                break;
+            }
+            cout << "Enter the target: ";
+            cin >> target;
+            idx = linear_search(target);
+            if (idx == -1)
+            {
+                cout << "Target not found";
+            }
+            else
+            {
+                cout << "Target at idx: " << idx << endl;
+            }
+            break;
+        case 6:
+            break;
+        }
+    }
+    return 0;
+}
