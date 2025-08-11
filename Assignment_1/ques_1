@@ -13,7 +13,6 @@ void create()
     }
     cout << endl;
 }
-// to display an array
 void display()
 {
 
@@ -36,7 +35,6 @@ void insert(int num, int idx)
     arr[idx] = num;
     ++size1;
 }
-// to delete element in an array
 void del(int idx)
 {
     for (int i = idx; i < size1 - 1; i++)
@@ -45,7 +43,6 @@ void del(int idx)
     }
     size1--;
 }
-// For Linear search
 int linear_search(int target)
 {
     for (int i = 0; i < size1; i++)
@@ -64,11 +61,8 @@ int main()
     int target = -1;
     while (button != 6)
     {
-
         cout << "Press 1:Create\nPress 2:Display\nPress 3:Insert\nPress 4:Delete\nPress 5:Linear Search\nPress 6:Exit" << endl;
         cin >> button;
-
-        // creating menu
         switch (button)
         {
         case 1:
