@@ -61,18 +61,7 @@ void peek()
     }
 }
 
-void printMenu()
-{
-    cout << "\n--- Stack Menu ---\n";
-    cout << "1. Push\n";
-    cout << "2. Pop\n";
-    cout << "3. isEmpty\n";
-    cout << "4. isFull\n";
-    cout << "5. Display\n";
-    cout << "6. Peek\n";
-    cout << "7. Exit\n";
-    cout << "Enter your choice: ";
-}
+
 
 int main()
 {
