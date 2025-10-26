@@ -1,62 +1,102 @@
 #include <iostream>
 using namespace std;
 
-struct DNode {
+class Node {
+public:
     int data;
-    DNode* prev;
-    DNode* next;
-    DNode(int val) : data(val), prev(nullptr), next(nullptr) {}
+    Node* next;
+    Node* prev;
+    
+    Node(int value) {
+        data = value;
+        next = nullptr;
+        prev = nullptr;
+    }
 };
 
-void insertDoubly(DNode*& head, int val) {
-    DNode* newNode = new DNode(val);
-    if (!head) {
-        head = newNode;
-        return;
+bool hasEvenParity(int num) {
+    int count = 0;
+    while (num > 0) {
+        count += num & 1;
+        num >>= 1;
     }
-    DNode* temp = head;
-    while (temp->next) temp = temp->next;
-    temp->next = newNode;
-    newNode->prev = temp;
+    return count % 2 == 0;
 }
 
-void removeEvenDoubly(DNode*& head) {
-    DNode* temp = head;
-    while (temp) {
-        if (temp->data % 2 == 0) {
-            DNode* toDelete = temp;
-            if (temp->prev) temp->prev->next = temp->next;
-            else head = temp->next;
-            if (temp->next) temp->next->prev = temp->prev;
-            temp = temp->next;
-            delete toDelete;
-        } else {
-            temp = temp->next;
+class DoublyLinkedList {
+private:
+    Node* head;
+
+public:
+    DoublyLinkedList() {
+        head = nullptr;
+    }
+
+    void insertAtEnd(int value) {
+        Node* newNode = new Node(value);
+        if (head == nullptr) {
+            head = newNode;
+            return;
+        }
+        
+        Node* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        current->next = newNode;
+        newNode->prev = current;
+    }
+
+    void removeEvenParityNodes() {
+        Node* current = head;
+        
+        while (current != nullptr) {
+            Node* nextNode = current->next;
+            
+            if (hasEvenParity(current->data)) {
+                if (current->prev != nullptr) {
+                    current->prev->next = current->next;
+                } else {
+                    head = current->next;
+                }
+                
+                if (current->next != nullptr) {
+                    current->next->prev = current->prev;
+                }
+                
+                delete current;
+            }
+            
+            current = nextNode;
         }
     }
-}
 
-void displayDoubly(DNode* head) {
-    for (DNode* temp = head; temp; temp = temp->next)
-        cout << temp->data << " ";
-    cout << endl;
-}
+    void display() {
+        Node* current = head;
+        while (current != nullptr) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << "\n";
+    }
+};
 
 int main() {
-    DNode* dHead = nullptr;
-    insertDoubly(dHead, 10);
-    insertDoubly(dHead, 15);
-    insertDoubly(dHead, 20);
-    insertDoubly(dHead, 25);
-    insertDoubly(dHead, 30);
-
-    cout << "Original Doubly Linked List: ";
-    displayDoubly(dHead);
-
-    removeEvenDoubly(dHead);
-
-    cout << "After removing even nodes (DLL): ";
-    displayDoubly(dHead);
-
+    DoublyLinkedList dll;
+    
+    cout << "Doubly Linked List:\n";
+    dll.insertAtEnd(1);
+    dll.insertAtEnd(2);
+    dll.insertAtEnd(3);
+    dll.insertAtEnd(4);
+    dll.insertAtEnd(5);
+    
+    cout << "Original list: ";
+    dll.display();
+    
+    dll.removeEvenParityNodes();
+    cout << "After removing even parity nodes: ";
+    dll.display();
+    
     return 0;
 }
