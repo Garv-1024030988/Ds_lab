@@ -1,17 +1,22 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
+class Node {
+public:
     int data;
     Node* next;
-    Node(int val) : data(val), next(nullptr) {}
+    Node(int new_value) {
+        data = new_value;
+        next = nullptr;
+    }
 };
 
-void splitList(Node* head, Node** head1, Node** head2) {
-    if (!head) return;
-
+pair<Node*, Node*> splitList(Node* head) {
     Node* slow = head;
     Node* fast = head;
+
+    if (head == nullptr)
+        return {nullptr, nullptr};
 
     while (fast->next != head && fast->next->next != head) {
         fast = fast->next->next;
@@ -21,49 +26,40 @@ void splitList(Node* head, Node** head1, Node** head2) {
     if (fast->next->next == head)
         fast = fast->next;
 
-    *head1 = head;
-    *head2 = slow->next;
+    Node* head1 = head;
+    Node* head2 = slow->next;
+    fast->next = slow->next;
+    slow->next = head;
 
-    fast->next = *head2;
-    slow->next = *head1;
-}
-
-Node* createCircularList(int arr[], int n) {
-    Node* head = new Node(arr[0]);
-    Node* temp = head;
-    for (int i = 1; i < n; i++) {
-        temp->next = new Node(arr[i]);
-        temp = temp->next;
-    }
-    temp->next = head;
-    return head;
+    return {head1, head2};
 }
 
 void printList(Node* head) {
-    if (!head) return;
-    Node* temp = head;
-    do {
-        cout << temp->data << " ";
-        temp = temp->next;
-    } while (temp != head);
-    cout << endl;
+    Node* curr = head;
+    if (head != nullptr) {
+        do {
+            cout << curr->data << " ";
+            curr = curr->next;
+        } while (curr != head);
+        cout << endl;
+    }
 }
 
 int main() {
-    int arr[] = {1, 2, 3, 4, 5};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    Node* head = new Node(1);
+    Node* head1 = nullptr;
+    Node* head2 = nullptr;
 
-    Node* head = createCircularList(arr, n);
-    cout << "Original Circular List: ";
-    printList(head);
+    head->next = new Node(2);
+    head->next->next = new Node(3);
+    head->next->next->next = new Node(4);
+    head->next->next->next->next = head;
 
-    Node *head1 = nullptr, *head2 = nullptr;
-    splitList(head, &head1, &head2);
+    pair<Node*, Node*> result = splitList(head);
+    head1 = result.first;
+    head2 = result.second;
 
-    cout << "First Half: ";
     printList(head1);
-
-    cout << "Second Half: ";
     printList(head2);
 
     return 0;
