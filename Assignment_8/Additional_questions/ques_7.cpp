@@ -1,97 +1,60 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-class DNode {
-public:
-    int data;
-    DNode* prev;
-    DNode* next;
-
-    DNode(int val) {
-        data = val;
-        prev = next = nullptr;
-    }
-};
-
-class DoublyLinkedList {
-public:
-    DNode* head;
-
-    DoublyLinkedList() { head = nullptr; }
-
-    void insertSorted(int val) {
-        DNode* n = new DNode(val);
-        if (!head || val < head->data) {
-            n->next = head;
-            if (head) head->prev = n;
-            head = n;
-            return;
-        }
-        DNode* temp = head;
-        while (temp->next && temp->next->data < val)
-            temp = temp->next;
-        n->next = temp->next;
-        if (temp->next) temp->next->prev = n;
-        temp->next = n;
-        n->prev = temp;
-    }
-
-    void display() {
-        DNode* temp = head;
-        while (temp) {
-            cout << temp->data << " <-> ";
-            temp = temp->next;
-        }
-        cout << "NULL\n";
-    }
-};
-
-class Node {
-public:
-    int data;
+struct Node {
+    int val;
     Node* left;
     Node* right;
-
-    Node(int val) {
-        data = val;
-        left = right = nullptr;
-    }
+    Node(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-Node* insertBST(Node* root, int val) {
-    if (!root) return new Node(val);
-    if (val < root->data)
-        root->left = insertBST(root->left, val);
-    else if (val > root->data)
-        root->right = insertBST(root->right, val);
+Node* insertBST(Node* root, int x) {
+    if (!root) return new Node(x);
+    if (x < root->val) root->left = insertBST(root->left, x);
+    else root->right = insertBST(root->right, x);
     return root;
 }
 
-void inorderToList(Node* root, DoublyLinkedList& l) {
+void inorder(Node* root, vector<int>& v) {
     if (!root) return;
-    inorderToList(root->left, l);
-    l.insertSorted(root->data);
-    inorderToList(root->right, l);
+    inorder(root->left, v);
+    v.push_back(root->val);
+    inorder(root->right, v);
 }
 
+list<int> mergeToDLL(const vector<int>& a, const vector<int>& b) {
+    list<int> dll;
+    int i = 0, j = 0;
+    while (i < a.size() && j < b.size()) {
+        if (a[i] < b[j]) dll.push_back(a[i++]);
+        else dll.push_back(b[j++]);
+    }
+    while (i < a.size()) dll.push_back(a[i++]);
+    while (j < b.size()) dll.push_back(b[j++]);
+    return dll;
+}
 
+list<int> mergeBSTs(Node* root1, Node* root2) {
+    vector<int> a, b;
+    inorder(root1, a);
+    inorder(root2, b);
+    return mergeToDLL(a, b);
+}
 
 int main() {
-   DoublyLinkedList l;
-    Node* root1 = nullptr;
+    Node* root1 = NULL;
+    Node* root2 = NULL;
+
     root1 = insertBST(root1, 5);
     root1 = insertBST(root1, 3);
     root1 = insertBST(root1, 7);
 
-    Node* root2 = nullptr;
     root2 = insertBST(root2, 4);
-    root2 = insertBST(root2, 2);
-    root2 = insertBST(root2, 8);
-inorderToList(root1, l);
-    inorderToList(root2, l);
+    root2 = insertBST(root2, 1);
+    root2 = insertBST(root2, 6);
 
-    cout << "Combined BSTs into sorted doubly linked list:\n";
-    l.display();
+    list<int> dll = mergeBSTs(root1, root2);
 
-    return 0;
+    for (int x : dll) cout << x << " ";
+    cout << endl;
 }
